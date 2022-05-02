@@ -1,0 +1,18 @@
+resource "google_binary_authorization_policy" "policy" {
+  count = var.ns_ba_policy == true ? 0 : 1
+  admission_whitelist_patterns {
+    name_pattern = "gcr.io/google_containers/*"
+  }
+
+  default_admission_rule {
+    evaluation_mode  = "ALWAYS_DENY"
+    enforcement_mode = "ENFORCED_BLOCK_AND_AUDIT_LOG"
+  }
+  global_policy_evaluation_mode = "DISABLE"
+  # cluster_admission_rules {
+  #   cluster                 = "us-central1-a.prod-cluster"
+  #   evaluation_mode         = "REQUIRE_ATTESTATION"
+  #   enforcement_mode        = "ENFORCED_BLOCK_AND_AUDIT_LOG"
+  #   require_attestations_by = [google_binary_authorization_attestor.attestor.name]
+  # }
+}
