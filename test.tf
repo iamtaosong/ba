@@ -4,6 +4,15 @@ data "google_kms_crypto_key_version" "version" {
   version    = 1
 }
 
+resource "google_container_analysis_note" "note" {
+  name = "test-attestor-note"
+  attestation_authority {
+    hint {
+      human_readable_name = "Attestor Note"
+    }
+  }
+}
+
 resource "google_binary_authorization_attestor" "attestor" {
   name = "gke-attestor-01"
   attestation_authority_note {
