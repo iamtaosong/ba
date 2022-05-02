@@ -1,3 +1,18 @@
+
+resource "google_binary_authorization_attestor" "attestor" {
+  name = "gke-attestor-01"
+  attestation_authority_note {
+    note_reference = google_container_analysis_note.note.name
+    public_keys {
+      id = data.google_kms_crypto_key_version.version.id
+      pkix_public_key {
+        public_key_pem      = data.google_kms_crypto_key_version.version.public_key[0].pem
+        signature_algorithm = data.google_kms_crypto_key_version.version.public_key[0].algorithm
+      }
+    }
+  }
+}
+
 resource "google_binary_authorization_attestor" "kubeflow-namespace-attestor" {
   name = "gke-ns-kubflow-attestor"
   attestation_authority_note {
