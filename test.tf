@@ -1,4 +1,9 @@
 
+data "google_kms_crypto_key_version" "version" {
+  crypto_key = "projects/project-id/locations/europe-west2/keyRings/<keyring>/cryptoKeys/test-attestor-key"
+  version    = 1
+}
+
 resource "google_binary_authorization_attestor" "attestor" {
   name = "gke-attestor-01"
   attestation_authority_note {
