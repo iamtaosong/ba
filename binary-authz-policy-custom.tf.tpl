@@ -102,3 +102,23 @@ variable "kubeflow_attestor_id" {
 variable "project_id" {
   type    = string
 }
+
+
+
+
+
+# module "exp_binary_auth_policy" {
+#   source     = "./module/ba-policy"
+#   project_id = var.project_id
+#   # admission_whitelist_patterns = ["gcr.io/google_containers/", "gcr.io/google_containers/tao"]
+# }
+
+
+module "pr_binary_auth_policy" {
+  source     = "./module/ba-policy"
+  project_id = var.project_id
+  # admission_whitelist_patterns = ["gcr.io/google_containers/", "gcr.io/google_containers/tao"]
+  ns_ba_policy         = true
+  default_attestor_id  = module.kubeflow_namespace_attestor.attestor_id
+  kubeflow_attestor_id = module.kubeflow_namespace_attestor.attestor_id
+}
