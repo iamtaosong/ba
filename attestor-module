@@ -1,0 +1,60 @@
+
+resource "random_id" "random" {
+  byte_length = 2
+}
+
+resource "google_binary_authorization_attestor" "this" {
+  name = "gke-attestor-${random_id.random.hex}"
+  attestation_authority_note {
+    note_reference = google_container_analysis_note.this.name
+    public_keys {
+      id = data.google_kms_crypto_key_version.this.id
+      pkix_public_key {
+        public_key_pem      = data.google_kms_crypto_key_version.this.public_key[0].pem
+        signature_algorithm = data.google_kms_crypto_key_version.this.public_key[0].algorithm
+      }
+    }
+  }
+}
+
+resource "google_container_analysis_note" "this" {
+  name = "attestor-node-${random_id.random.hex}"
+  attestation_authority {
+    hint {
+      human_readable_name = var.attestor_node
+    }
+  }
+}
+
+
+data "google_kms_crypto_key_version" "this" {
+  crypto_key = var.kms_key
+  version    = var.kms_key_version
+}
+ 
+ 
+ 
+ 
+ output "attestor_id" {
+  description = "Binary Authz attestor id"
+  value       = google_binary_authorization_attestor.this.id
+}
+
+provider "random" {
+  version = "~>2.2"
+}
+
+variable "kms_key" {
+  type = string
+}
+
+variable "kms_key_version" {
+  type    = string
+  default = "1"
+}
+
+variable "attestor_node" {
+  type    = string
+  default = "Attestor Note"
+}
+ 
