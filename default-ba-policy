@@ -1,0 +1,42 @@
+resource "google_binary_authorization_policy" "this" {
+  count = var.ns_ba_policy == true ? 0 : 1
+  dynamic "admission_whitelist_patterns" {
+    for_each = var.admission_whitelist_patterns
+    content {
+      name_pattern = admission_whitelist_patterns.value
+    }
+  }
+  default_admission_rule {
+    evaluation_mode  = var.evaluation_mode
+    enforcement_mode = var.enforcement_mode
+  }
+  global_policy_evaluation_mode = var.global_policy_evaluation_mode
+}
+
+
+variable "admission_whitelist_patterns" {
+  type    = list
+}
+
+variable "enforcement_mode" {
+  type        = string
+  description = "svc hub  project ID"
+  default     = "DRYRUN_AUDIT_LOG_ONLY"
+}
+
+variable "evaluation_mode" {
+  type        = string
+  description = "svc hub  project ID"
+  default     = "ALWAYS_DENY"
+}
+
+variable "global_policy_evaluation_mode" {
+  type        = string
+  description = "svc hub  project ID"
+  default     = "DISABLE"
+}
+
+variable "ns_ba_policy" {
+  type    = bool
+  default = false
+}
