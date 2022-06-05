@@ -1,0 +1,115 @@
+#!/bin/bash 
+
+VERSION=$(git log -1 --pretty=%h)
+REPO="eu.gcr.io/<projectid>/docekr-git-trace:"
+TAG="$REPO$VERSION"
+LATEST="${REPO}latest"
+BUILD_TIMESTAMP=$( date '+%F_%H:%M:%S' )
+docker build -t "$TAG" -t "$LATEST" --build-arg GIT_COMMIT="$VERSION" --build-arg BUILD_TIMESTAMP="$BUILD_TIMESTAMP"  . 
+docker push "$TAG" 
+docker push "$LATEST"
+
+
+
+#This is a sample Image  
+FROM ubuntu  
+ARG GIT_COMMIT
+LABEL git_commit=$GIT_COMMIT
+CMD [“echo”,”Image created”] 
+
+
+
+[
+    {
+        "Id": "sha256:105eb1f95931219f34d9003e818302618c4d44b2bf63afd324b04d988fd3adf7",
+        "RepoTags": [
+            "eu.gcr.io/projectid/docekr-git-trace:9146f9a",
+            "eu.gcr.io/projectid/docekr-git-trace:latest"
+        ],
+        "RepoDigests": [
+            "eu.gcr.io/projectid/docekr-git-trace@sha256:1c54b4fa0e2256ec2eaed75e662dea1d1c93230a299c5e5353f99a1139d08060"
+        ],
+        "Parent": "sha256:752279e7ad819540c33183a710ea5ff0eeb681d2c02b9ea11b59be76adaa49e9",
+        "Comment": "",
+        "Created": "2022-06-04T18:15:44.625151609Z",
+        "Container": "cccacf2dd866be8c7f00193490a87401a3227cf8e82766b8537aac68d69269f9",
+        "ContainerConfig": {
+            "Hostname": "cccacf2dd866",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": [
+                "/bin/sh",
+                "-c",
+                "#(nop) ",
+                "CMD [\"/bin/sh\" \"-c\" \"[“echo”,”Image created”]\"]"
+            ],
+            "Image": "sha256:752279e7ad819540c33183a710ea5ff0eeb681d2c02b9ea11b59be76adaa49e9",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {
+                "git_commit": "9146f9a"
+            }
+        },
+        "DockerVersion": "20.10.2",
+        "Author": "",
+        "Config": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": [
+                "/bin/sh",
+                "-c",
+                "[“echo”,”Image created”]"
+            ],
+            "Image": "sha256:752279e7ad819540c33183a710ea5ff0eeb681d2c02b9ea11b59be76adaa49e9",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {
+                "git_commit": "9146f9a"
+            }
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 72759661,
+        "VirtualSize": 72759661,
+        "GraphDriver": {
+            "Data": {
+                "MergedDir": "/var/lib/docker/overlay2/6cbf9bdc455c11be8bfe29f4ce13fe503bc0c300d7b12b89736c71e654fb03ff/merged",
+                "UpperDir": "/var/lib/docker/overlay2/6cbf9bdc455c11be8bfe29f4ce13fe503bc0c300d7b12b89736c71e654fb03ff/diff",
+                "WorkDir": "/var/lib/docker/overlay2/6cbf9bdc455c11be8bfe29f4ce13fe503bc0c300d7b12b89736c71e654fb03ff/work"
+            },
+            "Name": "overlay2"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:68a85fa9d77ecac87de23805c4be8766bda08a86787e324036cbcf84b62640fa"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2022-06-04T18:15:44.671725816Z"
+        }
+    }
+]
